@@ -16,8 +16,8 @@
             height: 100%;
             font-size: 0;
             font-family: sans-serif;
-            color: #fff;
-            background-color: #000;
+            color: rgb(0, 225, 255);
+            background-color: rgb(207, 180, 241);
             user-select: none;
         }
 
@@ -117,11 +117,43 @@
     svg.makeLayer({ parent: dom.stage, id: "svgLayer", x: 0, y: 0 });
 
     //drawing
-    svg.makeShape({ parent: dom.svgLayer, id: "form", stroke: 1, color: "#f00", d: svg.path([{ x: -30, y: -50 }, { x: 50, y: 30 }, { x: -50, y: 30 }]) })
+    /*svg.makeShape({ parent: dom.svgLayer, id: "form", stroke: 0.1, color: "#f00", d: svg.path([{ x: -30, y: -50 }, { x: 50, y: 30 }, { x: -50, y: 30 }]) })
     svg.makeLine({ parent: dom.svgLayer, id: "linie", stroke: 1, color: "#f0f", d: svg.path([{ x: -50, y: -50 }, { x: 50, y: 30 }]) })
+    svg.makeLine({ parent: dom.svgLayer, id: "linie", stroke: 1, color: "#f0f", d: svg.path([{ x: -60, y: -50 }, { x: 50, y: 30 }]) })
+    svg.makeLine({ parent: dom.svgLayer, id: "linie", stroke: 1, color: "#f0f", d: svg.path([{ x: -70, y: -50 }, { x: 50, y: 30 }]) })
+    svg.makeLine({ parent: dom.svgLayer, id: "linie", stroke: 1, color: "#f0f", d: svg.path([{ x: -80, y: -50 }, { x: 50, y: 30 }]) })
     svg.makeLine({ parent: dom.svgLayer, id: "punkt", cap: "round", stroke: 10, color: "#ff0", d: svg.path([{ x: -30, y: -30 }]) })
+    */
 
+    let square = 10;
+    let distance = 10;
+    let cells = 6;
+    let offset = -cells/ 2 * distance;
+    let colors = ["#f00", "#ff0", "#f0f"];
+    let sizes = [square, square * 0.75, square * 0.5]
 
+    //nested loop
+    for (let x = 0; x < cells; x += 1) {
+        for (let y = 0; y < cells; y += 1) {
+
+            let xpos = offset + x * distance;
+            let ypos = offset + y * distance;
+
+            let dice = Math.floor(Math.random()*colors.length);
+            let dice2 = Math.floor(Math.random()*sizes.length);
+
+            square = sizes[dice2];
+
+            let path = [ //zeichnet ein Quadrat ausgehend vom offsetpunkt
+                { x: xpos - square / 2, y: ypos - square/2 },
+                { x: xpos + square / 2, y: ypos - square/2 },
+                { x: xpos + square / 2, y: ypos + square/2 },
+                { x: xpos - square / 2, y: ypos + square/2 },
+            ];
+
+             svg.makeShape({ parent: dom.svgLayer, id: "form", stroke: 5, color: colors[dice], d: svg.path(path) })
+        }
+    }
 </script>
 
 </html>
