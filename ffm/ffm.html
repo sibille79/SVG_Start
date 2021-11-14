@@ -1,0 +1,133 @@
+doctype html>
+<html>
+
+<head>
+
+    <title>ffm</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 0;
+            font-family: sans-serif;
+            color: rgb(0, 225, 255);
+            background-color: rgb(207, 180, 241);
+            user-select: none;
+        }
+
+        stage,
+        svg,
+        path {
+            position: fixed;
+            overflow: visible;
+        }
+    </style>
+
+</head>
+
+<body>
+</body>
+
+<script>
+
+    //CODE
+
+    let twrk = {};
+
+
+    //COORDINATES
+
+    twrk.scale = function ({ width, height }) {
+        if (width) {
+            twrk.width = width;
+            twrk.res = window.innerWidth / twrk.width;
+            twrk.height = window.innerHeight / twrk.res;
+        } else if (height) {
+            twrk.height = height;
+            twrk.res = window.innerHeight / twrk.height;
+            twrk.width = window.innerWidth / twrk.res;
+        }
+        twrk.center = { x: twrk.width / 2, y: twrk.height / 2 };
+    }
+    twrk.scale({ height: 120 });
+
+
+    //SVG
+
+    let svg = {};
+
+    svg.nameSpace = "http://www.w3.org/2000/svg";
+
+    svg.path = function (ia) {
+
+        let output = "M ";
+        for (var i = 0; i < ia.length; i++) {
+            output += ia[i].x * twrk.res + " " + ia[i].y * twrk.res + " ";
+        }
+        output += "z";
+
+        return output;
+    };
+
+    svg.makeLayer = function ({ parent, id, x = 0, y = 0 }) {
+        dom[id] = document.createElementNS(svg.nameSpace, "svg");
+        dom[id].id = id;
+        dom[id].style.transform = "translateX(" + (x * twrk.res) + "px) translateY(" + (y * twrk.res) + "px)";
+        parent.appendChild(dom[id]);
+    };
+
+    svg.makeLine = function ({ parent, id, d = "", color = "#ff00ff", stroke = 1, cap = "butt", join = "round" }) {
+        dom[id] = document.createElementNS(svg.nameSpace, "path");
+        dom[id].setAttributeNS(null, "fill", "none");
+        dom[id].setAttributeNS(null, "d", d);
+        dom[id].setAttributeNS(null, "stroke-width", stroke * twrk.res);
+        dom[id].setAttributeNS(null, "stroke", color);
+        dom[id].setAttributeNS(null, "stroke-linecap", cap);
+        dom[id].setAttributeNS(null, "stroke-join", join);
+        dom[id].id = id;
+        parent.appendChild(dom[id]);
+    };
+
+    svg.makeShape = function ({ parent, id, d = "", color = "#ff00ff" }) {
+        dom[id] = document.createElementNS(svg.nameSpace, "path");
+        dom[id].setAttributeNS(null, "fill", color);
+        dom[id].setAttributeNS(null, "d", d);
+        dom[id].id = id;
+        parent.appendChild(dom[id]);
+    };
+
+
+    //DOM
+
+    let dom = {};
+
+    //stage
+    dom.stage = document.createElement("stage");
+    dom.stage.style.transform = "translateX(" + (twrk.center.x * twrk.res) + "px) translateY(" + (twrk.center.y * twrk.res) + "px)";
+    dom.stage.id = "stage";
+    document.body.appendChild(dom.stage);
+
+    //svg layer
+    svg.makeLayer({ parent: dom.stage, id: "svgLayer", x: 0, y: 0 });
+
+    //drawing
+    /*svg.makeShape({ parent: dom.svgLayer, id: "form", stroke: 0.1, color: "#f00", d: svg.path([{ x: -30, y: -50 }, { x: 50, y: 30 }, { x: -50, y: 30 }]) })
+    svg.makeLine({ parent: dom.svgLayer, id: "linie", stroke: 1, color: "#f0f", d: svg.path([{ x: -50, y: -50 }, { x: 50, y: 30 }]) })
+    svg.makeLine({ parent: dom.svgLayer, id: "linie", stroke: 1, color: "#f0f", d: svg.path([{ x: -60, y: -50 }, { x: 50, y: 30 }]) })
+    svg.makeLine({ parent: dom.svgLayer, id: "linie", stroke: 1, color: "#f0f", d: svg.path([{ x: -70, y: -50 }, { x: 50, y: 30 }]) })
+    svg.makeLine({ parent: dom.svgLayer, id: "linie", stroke: 1, color: "#f0f", d: svg.path([{ x: -80, y: -50 }, { x: 50, y: 30 }]) })
+    svg.makeLine({ parent: dom.svgLayer, id: "punkt", cap: "round", stroke: 10, color: "#ff0", d: svg.path([{ x: -30, y: -30 }]) })
+    */
+
+    svg.makeLine({ parent: dom.svgLayer, id: "punkt", cap: "round", stroke: 0.1, color: "#fff", x: 0, y: 0, d: "M133.5,6.4l0.9-4.7c-1.5-0.5-3-0.7-4.5-0.7c-3.2-0.2-6,2.2-6.3,5.4c0,0.3,0,0.6,0,0.9v0.8h-2.9 v4.9h2.9v11.7h6.3V12.9h4.2V8.1H130V7.3c0-0.9,0.4-1.5,1.3-1.5C132.1,5.9,132.9,6.1,133.5,6.4 M148.3,6.4l0.9-4.7 c-1.5-0.5-3-0.7-4.5-0.7c-3.2-0.2-6,2.2-6.3,5.4c0,0.3,0,0.6,0,0.9v0.8h-2.9v4.9h2.9v11.7h6.3V12.9h4.2V8.1h-4.2V7.3 c0-0.9,0.4-1.5,1.3-1.5C146.9,5.9,147.7,6.1,148.3,6.4 M181,24.6v-9.9c0-4.2-1.8-7.6-6.5-7.6c-2.3,0-4.6,1-6.1,2.7 c-1.1-1.9-3.2-2.9-5.4-2.8c-1.9,0-3.8,0.7-5.2,2.1V7.4h-6.3v17.2h6.3V14.2c0.6-0.9,1.7-1.4,2.8-1.3c1.6,0,2.5,1,2.5,2.9v8.8h6.3 V14.1c0.7-0.8,1.7-1.2,2.8-1.2c1.6,0,2.5,1,2.5,2.9v8.8L181,24.6z" })
+    svg.makeLine({ parent: dom.svgLayer, id: "punkt", cap: "round", stroke: 0.1, color: "#fff", d: "M133.5,6.4l0.9-4.7c-1.5-0.5-3-0.7-4.5-0.7c-3.2-0.2-6,2.2-6.3,5.4c0,0.3,0,0.6,0,0.9v0.8h-2.9 v4.9h2.9v11.7h6.3V12.9h4.2V8.1H130V7.3c0-0.9,0.4-1.5,1.3-1.5C132.1,5.9,132.9,6.1,133.5,6.4 M148.3,6.4l0.9-4.7 c-1.5-0.5-3-0.7-4.5-0.7c-3.2-0.2-6,2.2-6.3,5.4c0,0.3,0,0.6,0,0.9v0.8h-2.9v4.9h2.9v11.7h6.3V12.9h4.2V8.1h-4.2V7.3 c0-0.9,0.4-1.5,1.3-1.5C146.9,5.9,147.7,6.1,148.3,6.4 M181,24.6v-9.9c0-4.2-1.8-7.6-6.5-7.6c-2.3,0-4.6,1-6.1,2.7 c-1.1-1.9-3.2-2.9-5.4-2.8c-1.9,0-3.8,0.7-5.2,2.1V7.4h-6.3v17.2h6.3V14.2c0.6-0.9,1.7-1.4,2.8-1.3c1.6,0,2.5,1,2.5,2.9v8.8h6.3 V14.1c0.7-0.8,1.7-1.2,2.8-1.2c1.6,0,2.5,1,2.5,2.9v8.8L181,24.6z", x: 10, y: 10,  })
+    
+</script>
+
+</html>
